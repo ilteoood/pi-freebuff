@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { fileURLToPath } from "node:url";
-import { randomUUID } from "node:crypto";
+import { randomUUID, generateKeyPairSync } from "node:crypto";
 import { streamSimple as builtinStreamSimple, createAssistantMessageEventStream } from "@earendil-works/pi-ai/compat";
 import { getAgentDir } from "@earendil-works/pi-coding-agent";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -246,11 +246,25 @@ function loadDeviceKeyRecord(): DeviceKeyRecord | null {
 	const own = parseDeviceKeyRecord(safeParse<unknown>(readTextFile(deviceKeyFile()) ?? "null"));
 	if (own) return own;
 	const cli = parseDeviceKeyRecord(safeParse<unknown>(readTextFile(path.join(CLI_CONFIG_DIR, "device-key.json")) ?? "null"));
-	if (!cli) return null;
-	saveDeviceKeyRecord(cli);
-	return cli;
+	if (cli) {
+		saveDeviceKeyRecord(cli);
+		return cli;
+	}
+	const generated = generateDeviceKeyRecord();
+saveDeviceKeyRecord(generated);
+return generated;
 }
 
+function generateDeviceKeyRecord(): DeviceKeyRecord {
+	const pair = generateKeyPairSync("ed25519");
+	const spki = pair.publicKey.export({ type: "spki", format: "der" });
+	return {
+		version: 1,
+		publicKey: spki.subarray(spki.length - 32).toString("base64url"),
+		privateKey: pair.privateKey.export({ type: "pkcs8", format: "der" }).toString("base64url"),
+		registrations: {},
+	};
+}
 function saveDeviceKeyRecord(record: DeviceKeyRecord): void {
 	fs.mkdirSync(getAgentDir(), { recursive: true });
 	fs.writeFileSync(deviceKeyFile(), JSON.stringify(record));
