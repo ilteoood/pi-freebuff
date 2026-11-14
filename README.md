@@ -100,6 +100,23 @@ Environment overrides: `FREEBUFF_API_ORIGIN` (default `https://www.codebuff.com`
 - `pi auth check --provider freebuff` reports `provider_not_found`: that command builds a model
   runtime without extensions, so use `/freebuff` inside a session instead.
 
+## Keeping the snapshot fresh
+
+The root prompt and the tool catalog are the two pieces the server compares, and they come from the
+official client. The CLI keeps them in its own session state, so they can be harvested instead of
+being hand-copied:
+
+```sh
+freebuff            # the official CLI, once, in any folder
+npm run refresh     # rewrites .pi/extensions/freebuff-system-prompt.txt and freebuff-tools.json
+```
+
+`npm run refresh` reads the newest `run-state.json` under `$FREEBUFF_CONFIG_DIR/projects` (default
+`~/.config/manicode`), takes the `base3-free-catalog` agent prompt and the resolved tool schemas
+from it, and prints what changed. Run it after a Freebuff CLI update; if the server starts refusing
+requests with `403 third_party_client_warning` on a request that used to work, the snapshot is the
+first thing to refresh.
+
 ## Development
 
 ```sh

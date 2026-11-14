@@ -41,8 +41,7 @@
 									},
 									"required": [
 										"path"
-									],
-									"additionalProperties": false
+									]
 								}
 							]
 						}
@@ -50,8 +49,7 @@
 				},
 				"required": [
 					"paths"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -96,16 +94,14 @@
 							"required": [
 								"oldString",
 								"newString"
-							],
-							"additionalProperties": false
+							]
 						}
 					}
 				},
 				"required": [
 					"path",
 					"replacements"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -136,8 +132,7 @@
 				"required": [
 					"path",
 					"content"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -177,8 +172,7 @@
 				},
 				"required": [
 					"command"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -215,8 +209,7 @@
 				},
 				"required": [
 					"pattern"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -248,8 +241,7 @@
 				},
 				"required": [
 					"pattern"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -270,8 +262,7 @@
 				},
 				"required": [
 					"path"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -303,15 +294,13 @@
 							},
 							"required": [
 								"task"
-							],
-							"additionalProperties": false
+							]
 						}
 					}
 				},
 				"required": [
 					"todos"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -342,8 +331,7 @@
 				},
 				"required": [
 					"query"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -372,8 +360,7 @@
 				},
 				"required": [
 					"url"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -420,8 +407,7 @@
 										},
 										"required": [
 											"label"
-										],
-										"additionalProperties": false
+										]
 									}
 								},
 								"multiSelect": {
@@ -449,22 +435,19 @@
 											"description": "Custom error message when pattern fails",
 											"type": "string"
 										}
-									},
-									"additionalProperties": false
+									}
 								}
 							},
 							"required": [
 								"question",
 								"options"
-							],
-							"additionalProperties": false
+							]
 						}
 					}
 				},
 				"required": [
 					"questions"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -496,15 +479,13 @@
 							},
 							"required": [
 								"prompt"
-							],
-							"additionalProperties": false
+							]
 						}
 					}
 				},
 				"required": [
 					"followups"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -542,15 +523,7 @@
 					},
 					"context": {
 						"description": "For action \"search\": optional structured JSON context about the project, stack, or constraints.",
-						"allOf": [
-							{
-								"type": "object",
-								"propertyNames": {
-									"type": "string"
-								},
-								"additionalProperties": false
-							}
-						]
+						"$ref": "#/$defs/__schema0"
 					},
 					"category": {
 						"description": "For action \"browse\": optional category filter, e.g. Database, Auth, Payments, Hosting, Email, Cache, Monitoring, Analytics, AI, Storage, CMS, Search, Realtime, Background Jobs, Infrastructure, CRM, Support, Productivity, Commerce, Video, Webhooks, SMS.",
@@ -579,7 +552,42 @@
 				"required": [
 					"action"
 				],
-				"additionalProperties": false
+				"$defs": {
+					"__schema0": {
+						"type": "object",
+						"propertyNames": {
+							"type": "string"
+						},
+						"additionalProperties": {
+							"$ref": "#/$defs/__schema1"
+						}
+					},
+					"__schema1": {
+						"anyOf": [
+							{
+								"type": "null"
+							},
+							{
+								"type": "string"
+							},
+							{
+								"type": "number"
+							},
+							{
+								"type": "boolean"
+							},
+							{
+								"$ref": "#/$defs/__schema0"
+							},
+							{
+								"type": "array",
+								"items": {
+									"$ref": "#/$defs/__schema1"
+								}
+							}
+						]
+					}
+				}
 			}
 		}
 	},
@@ -649,8 +657,7 @@
 													"source",
 													"search_id",
 													"service_slug"
-												],
-												"additionalProperties": false
+												]
 											}
 										]
 									}
@@ -659,16 +666,14 @@
 									"type",
 									"text",
 									"link"
-								],
-								"additionalProperties": false
+								]
 							}
 						]
 					}
 				},
 				"required": [
 					"widget"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -690,8 +695,7 @@
 				},
 				"required": [
 					"name"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	},
@@ -742,8 +746,7 @@
 				},
 				"required": [
 					"status"
-				],
-				"additionalProperties": false
+				]
 			}
 		}
 	}
