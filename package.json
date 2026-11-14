@@ -1,0 +1,14 @@
+{
+	"name": "pi-freebuff",
+	"private": true,
+	"type": "module",
+	"description": "Freebuff provider extension for the pi coding agent",
+	"scripts": {
+		"check": "tsc --noEmit",
+		"selfcheck": "node --experimental-strip-types scripts/selfcheck.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^24.0.0",
+		"typescript": "^5.9.0"
+	}
+}
