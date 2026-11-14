@@ -32,8 +32,17 @@ account if you try it.
 ## Install
 
 The extension lives at `.pi/extensions/freebuff.ts` and is picked up automatically when this
-directory is a trusted pi project. To use it from anywhere, copy or symlink that file into
-`~/.pi/agent/extensions/`.
+directory is a trusted pi project.
+
+To use it from anywhere, clone the repo into pi's global extension directory. pi loads a cloned
+directory through the `pi.extensions` manifest in `package.json`, so a private repo works as
+long as the clone succeeds:
+
+```sh
+gh repo clone ilteoood/pi-fbff ~/.pi/agent/extensions/pi-fbff
+```
+
+`gh` uses your GitHub login for the clone; for plain git, run `gh auth setup-git` once.
 
 ## Use
 
@@ -95,10 +104,6 @@ Environment overrides: `FREEBUFF_API_ORIGIN` (default `https://www.codebuff.com`
 
 ```sh
 npm install
-ln -sfn /usr/local/lib/node_modules/@earendil-works/pi-coding-agent \
-  node_modules/@earendil-works/pi-coding-agent
-ln -sfn /usr/local/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai \
-  node_modules/@earendil-works/pi-ai
 npm run check       # tsc --noEmit
 npm run selfcheck   # registers the provider against a stub pi
 ```
@@ -106,6 +111,3 @@ npm run selfcheck   # registers the provider against a stub pi
 The self-check stubs `fetch`, drives one turn through the provider and asserts the outgoing
 request: URL, headers, catalog handle, run id, session claim, root prompt, step reminder and the
 official tool catalog, plus the translation of the model's tool call back to pi's `read`.
-
-The two symlinks make pi's own packages resolvable outside the pi loader (npm removes them on
-every install).
