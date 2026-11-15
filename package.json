@@ -5,7 +5,8 @@
 	"description": "Freebuff provider extension for the pi coding agent",
 	"scripts": {
 		"check": "tsc --noEmit",
-		"selfcheck": "node --experimental-strip-types scripts/selfcheck.ts"
+		"selfcheck": "node --experimental-strip-types scripts/selfcheck.ts",
+		"refresh": "node --experimental-strip-types scripts/refresh-freebuff-snapshot.ts"
 	},
 	"devDependencies": {
 		"@earendil-works/pi-ai": "^1.5.2",

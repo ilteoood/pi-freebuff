@@ -100,6 +100,35 @@ Environment overrides: `FREEBUFF_API_ORIGIN` (default `https://www.codebuff.com`
 - `pi auth check --provider freebuff` reports `provider_not_found`: that command builds a model
   runtime without extensions, so use `/freebuff` inside a session instead.
 
+## Keeping the snapshot fresh
+
+The root prompt and the tool catalog are the two pieces the server compares, and they come from the
+official client. The CLI keeps them in its own session state (under
+`$FREEBUFF_CONFIG_DIR/projects/<project>/chats/<ts>/run-state.json`, default
+`~/.config/manicode`), so they can be harvested instead of being hand-copied.
+`npm run refresh` runs the whole thing:
+
+1. Reads the Freebuff token from pi's keychain (`~/.pi/agent/auth.json`).
+2. If `credentials.json` doesn't exist for that token, fetches `/api/v1/me`
+   and writes a provisional one. The server only reads `fingerprintHash`
+   during the OAuth handshake — every runtime call carries `authToken` plus
+   `fingerprintId` — so a locally synthesised hash is fine.
+3. Looks for the newest `run-state.json` and, if it has the
+   `base3-free-catalog` template + tool definitions, harvests them.
+4. If none exists and the official `freebuff` binary is on `PATH`, spawns it
+   under `script(1)`, sends one prompt, waits for the resulting `run-state.json`,
+   then harvests.
+5. Rewrites `.pi/extensions/freebuff-system-prompt.txt` and
+   `.pi/extensions/freebuff-tools.json` only when they actually change.
+
+So a normal flow is `pi auth --provider freebuff` once, then `npm run refresh`
+whenever Freebuff pushes a prompt or tool update. The only manual step on a
+fresh machine is `npm i -g freebuff` so the driver path can spawn the
+official TUI; if you don't want that, run the CLI once by hand and the
+script will harvest the resulting state without booting another session. If
+the server starts refusing requests with `403 third_party_client_warning` on
+a request that used to work, the snapshot is the first thing to refresh.
+
 ## Development
 
 ```sh
